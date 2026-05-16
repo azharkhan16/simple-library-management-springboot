@@ -3,6 +3,7 @@ package com.ducat.lms.service;
 import com.ducat.lms.dto.BookInputDto;
 import com.ducat.lms.dto.BookOutputDto;
 import com.ducat.lms.entity.Book;
+import com.ducat.lms.exception.BookNotFoundException;
 import com.ducat.lms.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
 
     @Override
-    public BookOutputDto getBook(Long id) {
-        Book bookEntity = bookRepository.findById(id).orElse(null);
+    public BookOutputDto getBookById(Long id) {
+        Book bookEntity = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " +id));
 
         BookOutputDto bookOutputDto = new BookOutputDto();
 
@@ -83,9 +85,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookOutputDto updateBook(Long id, BookInputDto bookInputDto) {
-        Book bookEntity = new Book();
-        bookEntity.setId(id);
+    public BookOutputDto updateBookById(Long id, BookInputDto bookInputDto) {
+        Book bookEntity = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Cant update, Book not found with id: " +id));
+
         bookEntity.setName(bookInputDto.getName());
         bookEntity.setAuthor(bookInputDto.getAuthor());
         bookEntity.setPrice(bookInputDto.getPrice());
@@ -103,8 +106,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String removeBook(Long id) {
-        bookRepository.deleteById(id);
-        return "Book id: " + id + " successfully removed.";
+        Book bookEntity = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Cant delete, Book not found with id: " +id));
+
+        bookRepository.delete(bookEntity);
+        return "Book with id: " + id + " successfully removed.";
     }
 }
 

@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface BookService {
 
-    BookOutputDto getBook(Long id);
+    BookOutputDto getBookById(Long id);
     List<BookOutputDto> getAllBooks();
     BookOutputDto  addBook(BookInputDto bookInputDto);
-    BookOutputDto updateBook(Long id, BookInputDto bookInputDto);
+    BookOutputDto updateBookById(Long id, BookInputDto bookInputDto);
     String removeBook(Long id);
 }
 

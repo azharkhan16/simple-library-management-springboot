@@ -19,9 +19,9 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @GetMapping
-    public ResponseEntity<BookOutputDto> getBook(@RequestParam Long id) {
-        return new ResponseEntity<>(bookService.getBook(id), HttpStatusCode.valueOf(200));
+    @GetMapping("/{id}")
+    public ResponseEntity<BookOutputDto> getBookById(@PathVariable Long id) {
+        return new ResponseEntity<>(bookService.getBookById(id), HttpStatusCode.valueOf(200));
     }
 
     @GetMapping("/all")
@@ -30,18 +30,18 @@ public class BookController {
         return new ResponseEntity<>(bookService.getAllBooks(), HttpStatusCode.valueOf(200));
     }
 
-    @PostMapping
+    @PostMapping("/addBook")
     public ResponseEntity<BookOutputDto> addBook(@RequestBody BookInputDto bookInputDto) {
         return new ResponseEntity<>(bookService.addBook(bookInputDto), HttpStatusCode.valueOf(201));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookOutputDto> updateBook(@PathVariable Long id, @RequestBody BookInputDto bookInputDto) {
-        return new ResponseEntity<>(bookService.updateBook(id, bookInputDto), HttpStatusCode.valueOf(200));
+    public ResponseEntity<BookOutputDto> updateBookById(@PathVariable Long id, @RequestBody BookInputDto bookInputDto) {
+        return new ResponseEntity<>(bookService.updateBookById(id, bookInputDto), HttpStatusCode.valueOf(200));
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> removeBook(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> removeBook(@PathVariable Long id) {
         return new ResponseEntity<>(bookService.removeBook(id), HttpStatusCode.valueOf(200));
     }
 
